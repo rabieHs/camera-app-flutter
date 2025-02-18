@@ -1,7 +1,11 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:camera_app/affichage.dart';
 import 'package:camera_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class Home extends StatefulWidget {
   Home({super.key});
@@ -15,7 +19,7 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    controller = CameraController(cameras[1], ResolutionPreset.high);
+    controller = CameraController(cameras[0], ResolutionPreset.high);
 
     controller!.initialize().then((_) {
       if (!mounted) {
@@ -52,14 +56,38 @@ class _HomeState extends State<Home> {
                 ),
                 InkWell(
                   onTap: () async {
+                    print("DEBUG: IMAGE TAKE SUCCESS");
+
                     XFile image = await controller!.takePicture();
                     if (image.path.isNotEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text("Success "),
-                        backgroundColor: Colors.green,
-                      ));
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => Affichage(image)));
+                      final binaryImage = await image.readAsBytes();
+                      final base64Image = base64.encode(binaryImage);
+
+                      /// send data to the server
+
+                      //
+                      try {
+                        final response = await http.post(
+                          Uri.parse(
+                              "http://10.0.2.2:5000/upload"), // Make sure this is the correct local IP
+                          headers: {
+                            "Content-Type": "application/json"
+                          }, // Set JSON content type
+                          body: jsonEncode({
+                            "image": base64Image,
+                          }), // Encode as JSON
+                        );
+                        if (response.statusCode == 200) {
+                          final data = response.body;
+                          Map data2 = json.decode(data);
+
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) =>
+                                  Affichage(image, data2['class'])));
+                        }
+                      } catch (e) {
+                        print(e);
+                      }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text("Erro"),
