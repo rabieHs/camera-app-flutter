@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "260193466912",
+    "project_id": "camerapp-40bfc",
+    "storage_bucket": "camerapp-40bfc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:260193466912:android:88bd31d5c2bd20ab835a45",
+        "android_client_info": {
+          "package_name": "com.example.camera_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0rOJMrd7XpRd0P-c_44r6kcnACwD4Do8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
