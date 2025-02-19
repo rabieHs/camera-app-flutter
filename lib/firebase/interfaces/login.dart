@@ -1,3 +1,4 @@
+import 'package:camera_app/firebase/interfaces/add_get_data.dart';
 import 'package:camera_app/firebase/services/firebase_services.dart';
 import 'package:flutter/material.dart';
 
@@ -41,6 +42,8 @@ class Login extends StatelessWidget {
                       .login(emailController.text, passwordController.text);
 
                   print("email: ${userData.id}");
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => AddGetData()));
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text("Success login"),
                     backgroundColor: Colors.green,
